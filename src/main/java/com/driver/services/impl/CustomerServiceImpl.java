@@ -43,10 +43,11 @@ public class CustomerServiceImpl implements CustomerService {
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE).
 		// If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
+		TripBooking tripBooking = new TripBooking();
 		Driver driver = null;
 		List<Driver> driverList = driverRepository2.findAll();
 		for(Driver driver1 : driverList){
-			if(driver1.getCab().isAvailable() == true){
+			if(driver1.getCab().isAvailable() == Boolean.TRUE){
 				if(driver == null || driver.getDriverId() > driver1.getDriverId()){
 					driver = driver1;
 				}
@@ -57,13 +58,13 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		Customer customer = customerRepository2.findById(customerId).get();
 
-		TripBooking tripBooking = new TripBooking();
+		//TripBooking tripBooking = new TripBooking();
 		tripBooking.setDistanceInKm(distanceInKm);
 		tripBooking.setFromLocation(fromLocation);
 		tripBooking.setToLocation(toLocation);
 		tripBooking.setCustomer(customer);
 		tripBooking.setDriver(driver);
-		driver.getCab().setAvailable(false);
+		driver.getCab().setAvailable(Boolean.FALSE);
 		tripBooking.setStatus(TripStatus.CONFIRMED);
 
 		customer.getTripBookingList().add(tripBooking);
@@ -82,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.CANCELED);
 		tripBooking.setBill(0);
-		tripBooking.getDriver().getCab().setAvailable(true);
+		tripBooking.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBookingRepository2.save(tripBooking);
 	}
 
@@ -92,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.COMPLETED);
 		int bill = tripBooking.getDriver().getCab().getPerKmRate()*tripBooking.getDistanceInKm();
-		tripBooking.getDriver().getCab().setAvailable(true);
+		tripBooking.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBooking.setBill(bill);
 
 		tripBookingRepository2.save(tripBooking);
