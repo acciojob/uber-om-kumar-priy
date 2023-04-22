@@ -21,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	DriverRepository driverRepository2;
 
+
 	@Autowired
 	TripBookingRepository tripBookingRepository2;
 
@@ -53,6 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
 				}
 			}
 		}
+
 		if(driver == null){
 			throw new Exception("No cab available!");
 		}
@@ -66,6 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setDriver(driver);
 		driver.getCab().setAvailable(Boolean.FALSE);
 		tripBooking.setStatus(TripStatus.CONFIRMED);
+
 
 		customer.getTripBookingList().add(tripBooking);
 		driver.getTripBookingList().add(tripBooking);
